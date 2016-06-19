@@ -55,6 +55,8 @@ public class MagazynJFrame extends javax.swing.JFrame {
         openButton = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         openButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -135,19 +137,34 @@ public class MagazynJFrame extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("(Callable) Wyświetl NumerKarty dla ID:");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jTextField1.setText("1");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addComponent(addButton)
-                .addGap(18, 18, 18)
-                .addComponent(deleteButton)
-                .addGap(18, 18, 18)
-                .addComponent(editButton)
-                .addGap(34, 34, 34)
-                .addComponent(refreshButton)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(addButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(deleteButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(editButton)
+                        .addGap(34, 34, 34)
+                        .addComponent(refreshButton))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(41, 41, 41)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(openButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -168,7 +185,10 @@ public class MagazynJFrame extends javax.swing.JFrame {
                     .addComponent(openButton)
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(openButton1)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(openButton1)
+                    .addComponent(jButton2)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -263,6 +283,12 @@ public class MagazynJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_openButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Long id = Long.parseLong(jTextField1.getText());
+        NumerKarty nk = SQLMagazynpDao.getInstance().findNumerKartyFromID(id);
+        JOptionPane.showMessageDialog(this, "Numer Karty dla ID: "+id+ " to "+nk);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     public Magazynp getSelectedObj() {
         int selected = jTable.getSelectedRow(); // wczytanie zaznaczonego wiersza tabeli;
         System.out.println("selected = " + selected);
@@ -325,10 +351,12 @@ public class MagazynJFrame extends javax.swing.JFrame {
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JButton openButton;
     private javax.swing.JButton openButton1;
     private javax.swing.JButton refreshButton;

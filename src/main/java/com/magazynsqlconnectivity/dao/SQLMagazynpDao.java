@@ -9,6 +9,7 @@ import com.magazynsqlconnectivity.data.Magazynp;
 import com.magazynsqlconnectivity.data.NumerKarty;
 import com.magazynsqlconnectivity.data.Odpad;
 import com.magazynsqlconnectivity.utils.DBConnection;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -178,5 +179,25 @@ public class SQLMagazynpDao implements DaoManual<Magazynp> {
         } catch (Exception e) {
             System.out.println("Blad podczas dodawania " + e.getMessage());
         }
+    }
+
+    public NumerKarty findNumerKartyFromID(Long id) {
+        String sql = "{call getNR_KARTY (?, ?)}";
+        NumerKarty nk = null;
+        try (Connection c = dbc.getConnection(); CallableStatement stmt = c.prepareCall(sql)) {
+            stmt.setLong(1, id);
+            stmt.registerOutParameter(2, java.sql.Types.VARCHAR);
+            stmt.execute();
+            nk = new NumerKarty(stmt.getString(2));
+            stmt.close();
+            c.close();
+            
+        } catch (SQLException se) {
+            System.out.println("Blad podczas odczytu " + se.getMessage());
+        } catch (Exception e) {
+            System.out.println("Blad podczas odczytu " + e.getMessage());
+        }
+
+        return nk;
     }
 }
