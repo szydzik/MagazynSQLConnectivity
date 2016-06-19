@@ -106,7 +106,45 @@ public class SQLOdpadDao implements DaoManual<Odpad> {
     }
 
     public void insertBigData(List<Odpad> listOdpad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "INSERT INTO odpad (ID, GRUPA, PODGRUPA, RODZAJ, TYP, OPIS) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection c = dbc.getConnection(); PreparedStatement ps = c.prepareStatement(sql);) {
+            c.setAutoCommit(false);
+
+            int i = 0;
+            int wynik = 0;
+            for (Odpad t : listOdpad) {
+                System.out.println(""+t);
+                if (i++ >= 10000) {
+                    wynik += ps.executeLargeBatch().length;
+                    c.commit();
+                    System.out.println("BATCH EXECUTE!!!");
+                    ps.clearBatch();
+                    i = 0;
+                }
+                ps.setLong(1, t.getID());
+                ps.setObject(2, t.getGRUPA());
+                ps.setObject(3, t.getPODGRUPA());
+                ps.setObject(4, t.getRODZAJ());
+                ps.setObject(5, t.getTYP());
+                ps.setObject(6, t.getOPIS());
+                ps.addBatch();
+
+            }
+
+            wynik += ps.executeLargeBatch().length;
+            c.commit();
+            c.setAutoCommit(true);
+            System.out.println("Wynik = " + wynik);
+            System.out.println("Dodano rekordy!");
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+            System.out.println("Blad podczas dodawania " + se.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Blad podczas dodawania " + e.getMessage());
+        }
     }
 
 }

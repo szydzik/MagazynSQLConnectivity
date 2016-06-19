@@ -140,45 +140,43 @@ public class SQLMagazynpDao implements DaoManual<Magazynp> {
     }
 
     public void insertBigData(List<Magazynp> list) {
-//        String sql = "INSERT INTO magazynp (id, NR_MAG, NR_KARTY_id, NR_ODPADU, NR_KLIENTA, FIRMA, JEDN, MASA, DATAD) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-//
-//        try (Connection c = dbc.getConnection(); PreparedStatement ps = c.prepareStatement(sql);) {
-//            c.setAutoCommit(false);
-//
-//            int i = 0;
-//            int wynik=0;
-//            for (Magazynp t : list) {
-//                if (i++ >= 10000) {
-//                    wynik += ps.executeLargeBatch().length;
-//                    c.commit();
-//                    System.out.println("BATCH EXECUTE!!!");
-//                    ps.clearBatch();      
-//                    i=0;
-//                }
-//                ps.setNull(1, 0);
-//                ps.setInt(2, t.getNR_MAG());
-//                ps.setString(3, t.getNR_KARTY().toString());
-//                ps.setInt(4, t.getNR_ODPADU());
-//                ps.setInt(5, t.getNR_KLIENTA());
-//                ps.setInt(6, t.getFIRMA());
-//                ps.setString(7, t.getJEDN());
-//                ps.setDouble(8, t.getMASA());
-//                ps.setDate(9, new java.sql.Date(t.getDATAD().getTime()));
-//                ps.addBatch();
-//
-//            }
-//
-//
-//            wynik += ps.executeLargeBatch().length;
-//            c.commit();
-//            c.setAutoCommit(true);
-//            System.out.println("Wynik = "+wynik);
-//            System.out.println("Dodano rekordy!");
-//
-//        } catch (SQLException se) {
-//            System.out.println("Blad podczas dodawania " + se.getMessage());
-//        } catch (Exception e) {
-//            System.out.println("Blad podczas dodawania " + e.getMessage());
-//        }
+        String sql = "INSERT INTO magazynp (ID, NR_KARTY, ODPAD_ID, NR_KLIENTA, FIRMA, JEDN, MASA, DATAD) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection c = dbc.getConnection(); PreparedStatement ps = c.prepareStatement(sql);) {
+            c.setAutoCommit(false);
+
+            int i = 0;
+            int wynik = 0;
+            for (Magazynp t : list) {
+                if (i++ >= 10000) {
+                    wynik += ps.executeLargeBatch().length;
+                    c.commit();
+                    System.out.println("BATCH EXECUTE!!!");
+                    ps.clearBatch();
+                    i = 0;
+                }
+                ps.setLong(1, t.getID());
+                ps.setObject(2, t.getNR_KARTY().toString());
+                ps.setLong(3, t.getODPAD().getID());
+                ps.setObject(4, t.getNR_KLIENTA());
+                ps.setObject(5, t.getFIRMA());
+                ps.setObject(6, t.getJEDN());
+                ps.setObject(7, t.getMASA());
+                ps.setDate(8, new java.sql.Date(t.getDATAD().getTime()));
+                ps.addBatch();
+
+            }
+
+            wynik += ps.executeLargeBatch().length;
+            c.commit();
+            c.setAutoCommit(true);
+            System.out.println("Wynik = " + wynik);
+            System.out.println("Dodano rekordy!");
+
+        } catch (SQLException se) {
+            System.out.println("Blad podczas dodawania " + se.getMessage());
+        } catch (Exception e) {
+            System.out.println("Blad podczas dodawania " + e.getMessage());
+        }
     }
 }
