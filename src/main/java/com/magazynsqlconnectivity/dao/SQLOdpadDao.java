@@ -55,7 +55,23 @@ public class SQLOdpadDao implements DaoManual<Odpad> {
 
     @Override
     public void update(Odpad t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "UPDATE odpad SET GRUPA = ?, PODGRUPA = ?, RODZAJ = ?, TYP = ?, OPIS = ? WHERE ID = ?";
+
+        try (Connection c = dbc.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, t.getGRUPA());
+            ps.setInt(2, t.getPODGRUPA());
+            ps.setInt(3, t.getRODZAJ());
+            ps.setString(4, t.getTYP());
+            ps.setString(5, t.getOPIS());
+            ps.setLong(6, t.getID());
+            ps.executeUpdate();
+            System.out.println("Zmodyfikowano rekord");
+
+        } catch (SQLException se) {
+            System.out.println("Blad podczas Edycji " + se.getMessage());
+        } catch (Exception e) {
+            System.out.println("Blad podczas Edycji " + e.getMessage());
+        }
     }
 
     @Override
